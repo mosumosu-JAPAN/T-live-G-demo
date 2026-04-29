@@ -361,14 +361,27 @@ def fit_irl(weekly):
     out = {}
     for u, sub in weekly.groupby("username"):
         if len(sub) < 4:
-            out[u] = dict(weights={f:0.0 for f in feats}, r2=0.0, n=len(sub)); continue
+            out[u] = dict(weights=None, r2=0.0, n=len(sub), fallback=True); continue
         X = sub[feats].values.astype(float); y = sub["reward_signal"].values.astype(float)
         Xs = (X - X.mean(0)) / (X.std(0) + 1e-9); ys = (y - y.mean()) / (y.std() + 1e-9)
         A = np.column_stack([Xs, np.ones(len(Xs))])
         coef, *_ = lstsq(A, ys, rcond=None)
         w = coef[:4]; pred = Xs @ w
         ss_res = np.sum((ys-pred)**2); ss_tot = np.sum((ys-ys.mean())**2) + 1e-9
-        out[u] = dict(weights=dict(zip(feats, w)), r2=float(1 - ss_res/ss_tot), n=len(sub))
+        out[u] = dict(weights=dict(zip(feats, w)), r2=float(1 - ss_res/ss_tot), n=len(sub), fallback=False)
+
+    # Cohort-average fallback: when a creator has too few weeks for OLS, or the fit
+    # collapses to all-zero weights, substitute mean sensitivity from creators with
+    # valid fits — keeps the simulation responsive instead of dropping to delta=0.
+    valid = [v["weights"] for v in out.values() if v["weights"] is not None]
+    if valid:
+        avg = {f: float(np.mean([w[f] for w in valid])) for f in feats}
+    else:
+        avg = {f: 0.0 for f in feats}
+    for v in out.values():
+        if v["weights"] is None or all(abs(x) < 1e-9 for x in v["weights"].values()):
+            v["weights"] = avg.copy()
+            v["fallback"] = True
     return out
 
 def detect_hacking(df):
@@ -1063,7 +1076,7 @@ st.markdown(f"""
 # ────────────── Bottom credit ──────────────
 st.markdown(
     '<div class="bottom-credit">'
-    'Jayde Zhang · NTU MSc Applied AI · SenticNet Affective Computing Lab · Built with real TikTok public data'
+    'Built by Jayde · with real TikTok public data'
     '</div>',
     unsafe_allow_html=True,
 )
