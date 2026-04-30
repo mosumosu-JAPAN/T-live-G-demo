@@ -511,8 +511,8 @@ INSIGHTS = {
             "CN": "reward_signal = 0.5×Δplay + 0.3×Δengagement + 0.2×Δshares，按周聚合。cosplaybeauty888 近零方差（σ≈0.02），mommygardevoir69 高峰值低基线（peak/mean > 3x），vanzzcoser 高频波动。三种方差模式对应三种不同的优化目标函数。",
         },
         "Algorithm": {
-            "EN": "IRL fitting shows the three creators optimize for different reward dimensions. The SOP type's w_play is highest; the Anchor's w_engagement is highest. Today's recommender weights play_growth too aggressively, systematically rewarding SOP-style behavior — the root cause of ecosystem homogenization.",
-            "CN": "IRL 拟合显示三个创作者在优化不同的 reward 维度。SOP型 w_play 权重最高，太太型 w_engagement 权重最高。当前推荐算法 play_growth 权重过高，正在系统性奖励 SOP 型行为，这是生态同质化的根本原因。",
+            "EN": "Behavioral signal analysis shows the three creators optimize for different reward dimensions. The SOP type's w_play is highest; the Anchor's w_engagement is highest. The current incentive structure appears play_growth-dominant, observably rewarding SOP-style behavior more than engagement-quality patterns — surface this as a governance signal, not as a recommendation to retune ranking.",
+            "CN": "行为信号分析显示三个创作者在优化不同的 reward 维度。SOP型 w_play 最高，太太型 w_engagement 最高。当前激励结构呈现 play_growth 主导，相对更多地回报 SOP 型行为而非互动质量——以治理信号的形式呈现，而不是建议直接调整排序。",
         },
     },
     "irl": {
@@ -545,8 +545,8 @@ INSIGHTS = {
     },
     "ews": {
         "PM": {
-            "EN": "These early-warning signals act as governance-layer inputs that route into different intervention types: <b>variance collapse → content-homogenization risk → adjust algorithmic exploration weight</b>; <b>spike-cliff → gambling behavior → progressive intervention</b>; <b>quality–volatility divergence → top-creator churn risk → quality-protection mechanism</b>. The point isn't the detection itself — it's how these signals route to different governance actions.",
-            "CN": "这些预警信号可以作为治理层的输入，用于触发不同类型的干预机制：<b>方差坍缩 → 内容同质化风险 → 算法侧调节探索权重</b>；<b>尖峰-断崖 → 赌博行为 → 渐进式干预</b>；<b>质量-波动背离 → 高质量流失风险 → 质量保护机制</b>。关键不是检测本身，而是这些信号如何路由到不同治理动作。",
+            "EN": "These early-warning signals act as governance-layer inputs that route into different intervention types: <b>variance collapse → content-homogenization risk → diversify candidate-set composition</b>; <b>spike-cliff → gambling behavior → progressive intervention</b>; <b>quality–volatility divergence → top-creator churn risk → quality-protection mechanism</b>. The point isn't the detection itself — it's how these signals route to different governance actions <b>upstream of ranking</b>.",
+            "CN": "这些预警信号可以作为治理层的输入，用于触发不同类型的干预机制：<b>方差坍缩 → 内容同质化风险 → 提升候选集多样性</b>；<b>尖峰-断崖 → 赌博行为 → 渐进式干预</b>；<b>质量-波动背离 → 高质量流失风险 → 质量保护机制</b>。关键不是检测本身，而是这些信号如何<b>在排序上游</b>路由到不同的治理动作。",
         },
         "Data": {
             "EN": "Each signal is one computable trigger condition: variance collapse → rolling-σ; spike-cliff → peak/mean ratio with descent confirmation; quality–volatility divergence → joint condition on engagement-z-score and reward σ. All three can be wired straight into a streaming pipeline.",
@@ -573,8 +573,8 @@ INSIGHTS = {
     },
     "governance": {
         "PM": {
-            "EN": "The same edge-content video should weight differently in moderation depending on whether it came from the Anchor or from the SOP type. This taxonomy can convert directly into a differentiated guideline for the labeling team.",
-            "CN": "同一个擦边内容，来自太太型和SOP型的标注权重应该不同。这套 taxonomy 可以直接变成标注团队的差异化指南。",
+            "EN": "The same content may require <b>different intervention strategies</b> depending on creator behavior context. This taxonomy converts into a differentiated playbook for the moderation and governance teams — same content, different routing.",
+            "CN": "同一个内容可能需要根据创作者行为上下文采用<b>不同的干预策略</b>。这套 taxonomy 可以直接变成审核与治理团队的差异化 playbook——同样的内容，不同的路由。",
         },
         "Data": {
             "EN": "Intervention mapping — high w_risk → content classifier fine-tuning input; w_play >> w_engagement → governance signal feeds the candidate-set filter, not ranking weights; reward cliff → graduated enforcement curve replaces hard suppression.",
@@ -937,8 +937,8 @@ with alert_col:
 
 st.markdown(
     f'<div class="note-warn">'
-    f'{t("these videos are not policy violations. they are reward function failures. traditional moderation tools cannot catch this.",
-        "这些视频不违规。它们是 reward function 失效的信号。传统审核工具发现不了。")}'
+    f'{t("these videos are not policy violations. they are reward function failures. traditional moderation tools cannot catch this — which is why moderation should not be the first intervention surface.",
+        "这些视频不违规。它们是 reward function 失效的信号。传统审核工具发现不了——这也正是为什么 moderation 不应该是第一个干预表面。")}'
     f'</div>',
     unsafe_allow_html=True,
 )
@@ -1348,6 +1348,11 @@ st.markdown(f"""
   <div class="mb-section">{t("Secondary", "Secondary")}</div>
   <div class="mb-row secondary">{t("No significant drop in overall vertical engagement", "垂类整体互动率无显著下降")}</div>
   <div class="mb-row secondary">{t("False-positive intervention rate &lt; 3%", "误干预率 &lt; 3%")}</div>
+  <div class="mb-section" style="margin-top:18px;">{t("Implementation", "落地路径")}</div>
+  <div class="mb-row">{t(
+      "This would be implemented within the <b>governance tooling stack</b>, in collaboration with <b>ops</b> and <b>T&amp;S</b> teams.",
+      "落地在 <b>governance tooling stack</b> 内，与 <b>ops</b> 和 <b>T&amp;S</b> 团队协作完成。"
+  )}</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -1388,6 +1393,16 @@ st.markdown(f"""
 <div class="limit-box">
   <span class="lim-label">{limit_label}</span>
   <ul>{items_html}</ul>
+</div>
+""", unsafe_allow_html=True)
+
+# ────────────── Closing scope statement ──────────────
+st.markdown(f"""
+<div class="punchline">
+  {t(
+    "This work focuses on <span class='arrow'>defining the intervention layer and validating its direction</span> — <span class='from'>not building the full system.</span>",
+    "本项目的重点是<span class='arrow'>定义干预层并验证方向</span>——<span class='from'>不是构建完整系统。</span>"
+  )}
 </div>
 """, unsafe_allow_html=True)
 
