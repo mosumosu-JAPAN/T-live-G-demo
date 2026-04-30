@@ -545,8 +545,8 @@ INSIGHTS = {
     },
     "ews": {
         "PM": {
-            "EN": "These early-warning signals act as governance-layer inputs that route into different intervention types: <b>variance collapse → content-homogenization risk → diversify candidate-set composition</b>; <b>spike-cliff → gambling behavior → progressive intervention</b>; <b>quality–volatility divergence → top-creator churn risk → quality-protection mechanism</b>. The point isn't the detection itself — it's how these signals route to different governance actions <b>upstream of ranking</b>.",
-            "CN": "这些预警信号可以作为治理层的输入，用于触发不同类型的干预机制：<b>方差坍缩 → 内容同质化风险 → 提升候选集多样性</b>；<b>尖峰-断崖 → 赌博行为 → 渐进式干预</b>；<b>质量-波动背离 → 高质量流失风险 → 质量保护机制</b>。关键不是检测本身，而是这些信号如何<b>在排序上游</b>路由到不同的治理动作。",
+            "EN": "These early-warning signals act as governance-layer inputs that route into different intervention types: <b>variance collapse → content-homogenization risk → diversify candidate-set composition</b>; <b>spike-cliff → gambling behavior → progressive intervention</b>; <b>quality–volatility divergence → top-creator churn risk → quality-protection mechanism</b>. The point isn't the detection itself — it's how these signals route to different governance actions <b>upstream of ranking</b>. <b>This allows intervention to happen before moderation becomes necessary.</b>",
+            "CN": "这些预警信号可以作为治理层的输入，用于触发不同类型的干预机制：<b>方差坍缩 → 内容同质化风险 → 提升候选集多样性</b>；<b>尖峰-断崖 → 赌博行为 → 渐进式干预</b>；<b>质量-波动背离 → 高质量流失风险 → 质量保护机制</b>。关键不是检测本身，而是这些信号如何<b>在排序上游</b>路由到不同的治理动作。<b>这让干预可以在 moderation 必须介入之前发生。</b>",
         },
         "Data": {
             "EN": "Each signal is one computable trigger condition: variance collapse → rolling-σ; spike-cliff → peak/mean ratio with descent confirmation; quality–volatility divergence → joint condition on engagement-z-score and reward σ. All three can be wired straight into a streaming pipeline.",
@@ -573,8 +573,8 @@ INSIGHTS = {
     },
     "governance": {
         "PM": {
-            "EN": "The same content may require <b>different intervention strategies</b> depending on creator behavior context. This taxonomy converts into a differentiated playbook for the moderation and governance teams — same content, different routing.",
-            "CN": "同一个内容可能需要根据创作者行为上下文采用<b>不同的干预策略</b>。这套 taxonomy 可以直接变成审核与治理团队的差异化 playbook——同样的内容，不同的路由。",
+            "EN": "The same content may require <b>different intervention strategies</b> depending on creator behavior context. This taxonomy converts into a differentiated playbook for the moderation and governance teams — <b>same content, but different intervention paths depending on behavioral context</b>.",
+            "CN": "同一个内容可能需要根据创作者行为上下文采用<b>不同的干预策略</b>。这套 taxonomy 可以变成审核与治理团队的差异化 playbook——<b>同样的内容，但根据行为上下文走不同的干预路径</b>。",
         },
         "Data": {
             "EN": "Intervention mapping — high w_risk → content classifier fine-tuning input; w_play >> w_engagement → governance signal feeds the candidate-set filter, not ranking weights; reward cliff → graduated enforcement curve replaces hard suppression.",
@@ -618,11 +618,13 @@ st.markdown(f"""
 <div class="intro-block">
   <span class="intro-tag">{t("Scope &amp; framing", "范围与定位")}</span>
   {t(
+    "<p style='font-size:16px;color:#FFFFFF;margin-bottom:14px;'><b>The goal is not to replace moderation, but to move intervention earlier.</b></p>"
     "<p>This analysis starts from a content-moderation question but ultimately points to an earlier source of risk: <b>the platform's incentive structure</b>.</p>"
     '<p>Traditional moderation handles the consequences of violations. This project focuses on the upstream layer — <b>how the recommender system trains creator behavior through reward signals</b>, before any violation occurs.</p>'
     '<p>The proposal does not rewrite the recommender. It adds a <b>lightweight governance layer on top of existing ranking</b>, used to identify and intervene in risk behaviors that emerge from incentive distortion.</p>'
     '<p>This layer is designed to be <b>owned by governance teams</b>, enabling earlier and more nuanced intervention without relying solely on moderation or ranking changes.</p>'
     '<p style="color:#A8A8B6;font-size:13px;margin-top:12px;border-top:1px solid #2A2A3A;padding-top:12px;">A directional prototype to explore governance intervention design, not a production-ready system.</p>',
+    "<p style='font-size:16px;color:#FFFFFF;margin-bottom:14px;'><b>目标不是替代 moderation，而是把干预往前移。</b></p>"
     '<p>这个分析从一个内容审核问题出发，但最终指向一个更早期的风险来源：<b>平台激励结构</b>。</p>'
     '<p>传统 moderation 处理的是违规结果，而这个项目关注的是：在违规发生之前，<b>推荐系统如何通过 reward signal 训练创作者行为</b>。</p>'
     '<p>本方案不涉及重写推荐系统，而是提出一个<b>叠加在现有排序之上的轻量治理层</b>，用于识别和干预激励失真带来的风险行为。</p>'
@@ -1341,7 +1343,7 @@ st.markdown(f"""
 # Success metrics — PM ownership
 st.markdown(f"""
 <div class="metrics-box">
-  <span class="mb-tag">{t("As PM, I own these metrics", "作为 PM，我对这些指标负责")}</span>
+  <span class="mb-tag">{t("As PM, I own these metrics — and iterate the intervention policy based on experiment outcomes", "作为 PM，我对这些指标负责——并基于实验结果持续迭代干预策略")}</span>
   <div class="mb-section">{t("Primary", "Primary")}</div>
   <div class="mb-row">{t("Reduction in risky probing frequency", "高风险试探频率下降")}<span class="mb-arch">{t("· Boundary Prober", "· 边界党")}</span></div>
   <div class="mb-row">{t("Retention rate of high-quality creators", "高质量创作者留存率")}<span class="mb-arch">{t("· Ecosystem Anchor", "· 太太型")}</span></div>
@@ -1403,6 +1405,12 @@ st.markdown(f"""
     "This work focuses on <span class='arrow'>defining the intervention layer and validating its direction</span> — <span class='from'>not building the full system.</span>",
     "本项目的重点是<span class='arrow'>定义干预层并验证方向</span>——<span class='from'>不是构建完整系统。</span>"
   )}
+  <div style="font-size:14px;color:#A8A8B6;margin-top:14px;border-top:1px solid #2A2A3A;padding-top:14px;font-weight:400;">
+    {t(
+      "The focus here is defining a <b style='color:#ECECF2;font-weight:500;'>tractable first slice</b> of the governance layer.",
+      "这里聚焦的是<b style='color:#ECECF2;font-weight:500;'>治理层的一个可行的第一切片</b>。"
+    )}
+  </div>
 </div>
 """, unsafe_allow_html=True)
 
