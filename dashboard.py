@@ -301,6 +301,27 @@ table.impact td.t-delta.flat {{ color: {DIM}; }}
     padding-left: 12px; border-left: 2px solid {CYAN};
 }}
 
+/* Success metrics — PM ownership block */
+.metrics-box {{
+    background: {SURFACE}; border: 1px solid {BORDER}; border-left: 3px solid {CYAN};
+    border-radius: 0 6px 6px 0; padding: 20px 24px; margin: 22px 0 8px 0;
+    font-family: {MONO};
+}}
+.metrics-box .mb-tag {{
+    color: {CYAN}; font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em;
+    font-weight: 500; display: block; margin-bottom: 14px;
+}}
+.metrics-box .mb-section {{ font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: {MUTED}; margin: 14px 0 6px 0; font-weight: 500; }}
+.metrics-box .mb-section:first-of-type {{ margin-top: 0; }}
+.metrics-box .mb-row {{ font-size: 14px; color: {TEXT}; margin: 6px 0; line-height: 1.7; padding-left: 14px; position: relative; }}
+.metrics-box .mb-row::before {{ content: "→"; color: {CYAN}; position: absolute; left: 0; font-weight: 500; }}
+.metrics-box .mb-row.secondary {{ color: {NOTE}; }}
+.metrics-box .mb-row.secondary::before {{ color: {DIM}; }}
+.metrics-box .mb-row .mb-arch {{ color: {DIM}; font-size: 12.5px; margin-left: 4px; }}
+
+/* Wider, clean language toggle — keep buttons on one line */
+.lang-row [data-testid="stButton"] > button {{ font-size: 13px !important; padding: 6px 14px 8px 0 !important; white-space: nowrap !important; }}
+
 /* Closing punchline */
 .punchline {{
     font-family: {MONO}; color: {TEXT};
@@ -518,8 +539,8 @@ INSIGHTS = {
             "CN": "检测条件：play > 75th pct AND engagement < 25th pct AND risk > 0.5。规则型检测，生产环境建议 Isolation Forest 或 autoencoder 做无监督异常检测，消除人工阈值依赖。",
         },
         "Algorithm": {
-            "EN": "Reward hacking is, fundamentally, exploiting the recommender's reward proxy. Monitor the play/engagement ratio distribution; trigger review when a creator drifts >2σ from peer mean for sustained windows. This signal can feed directly into the recommender as negative feedback.",
-            "CN": "Reward hacking 本质是 exploit 推荐模型的 reward proxy。监控 play/engagement 比值分布，持续偏离同类均值 2σ 以上触发复核。该信号可直接加入推荐模型负反馈。",
+            "EN": "Reward distortion, at its root, is creators exploiting the recommender's reward proxy. Monitor the play/engagement ratio distribution; trigger review when a creator drifts >2σ from peer mean across sustained windows. The signal feeds in as a <b>governance-layer input that affects candidate filtering or distribution strategy</b>, without modifying the core ranking model.",
+            "CN": "Reward 失真本质是创作者在 exploit 推荐系统的 reward proxy。监控 play/engagement 比值分布，持续偏离同类均值 2σ 以上触发复核。该信号<b>作为治理层输入，影响候选集筛选或分发策略</b>，而不直接修改核心排序模型。",
         },
     },
     "ews": {
@@ -556,8 +577,8 @@ INSIGHTS = {
             "CN": "同一个擦边内容，来自太太型和SOP型的标注权重应该不同。这套 taxonomy 可以直接变成标注团队的差异化指南。",
         },
         "Data": {
-            "EN": "Intervention mapping — high w_risk → content classifier fine-tuning; w_play >> w_engagement → ranking weight recalibration; reward cliff → graduated enforcement curve.",
-            "CN": "Intervention mapping：w_risk high → content classifier fine-tuning；w_play >> w_engagement → ranking weight recalibration；reward cliff → graduated enforcement curve。",
+            "EN": "Intervention mapping — high w_risk → content classifier fine-tuning input; w_play >> w_engagement → governance signal feeds the candidate-set filter, not ranking weights; reward cliff → graduated enforcement curve replaces hard suppression.",
+            "CN": "Intervention mapping：w_risk high → content classifier fine-tuning 输入；w_play >> w_engagement → 治理信号影响候选集筛选，不动 ranking 权重；reward cliff → 用渐进式 enforcement 替代硬压制。",
         },
         "Algorithm": {
             "EN": "Experiment design: stratified A/B test, minimum window = max(adaptation_lag) = 6 weeks. Control keeps current weights; treatment moves per simulation; analyze results stratified by archetype. Recommend piloting in a single vertical (e.g., Cosplay) and using creator archetype as the stratification dimension rather than reading the whole-cohort mean.",
@@ -574,7 +595,7 @@ def insight(key):
 # ────────────── Header + language toggle ──────────────
 n_videos = len(df); n_creators = df["username"].nunique()
 
-title_col, lang_col = st.columns([6, 1])
+title_col, lang_col = st.columns([5, 1.6])
 with title_col:
     st.markdown(
         f'<h1 class="page-title">{t("Creator Behavior Intelligence · TikTok LIVE Ecosystem · Cosplay Vertical", "创作者行为智能 · TikTok LIVE 生态 · Cosplay 垂类")}</h1>'
@@ -583,7 +604,7 @@ with title_col:
     )
 with lang_col:
     st.markdown('<div class="lang-row" style="text-align:right;">', unsafe_allow_html=True)
-    lc1, lc2 = st.columns(2)
+    lc1, lc2 = st.columns([1.4, 1])
     with lc1:
         if st.button("English", key="lang_EN", type=("primary" if LANG == "EN" else "secondary")):
             st.session_state.lang = "EN"; st.rerun()
@@ -599,10 +620,14 @@ st.markdown(f"""
   {t(
     "<p>This analysis starts from a content-moderation question but ultimately points to an earlier source of risk: <b>the platform's incentive structure</b>.</p>"
     '<p>Traditional moderation handles the consequences of violations. This project focuses on the upstream layer — <b>how the recommender system trains creator behavior through reward signals</b>, before any violation occurs.</p>'
-    '<p>The proposal does not rewrite the recommender. It adds a <b>lightweight governance layer on top of existing ranking</b>, used to identify and intervene in risk behaviors that emerge from incentive distortion.</p>',
+    '<p>The proposal does not rewrite the recommender. It adds a <b>lightweight governance layer on top of existing ranking</b>, used to identify and intervene in risk behaviors that emerge from incentive distortion.</p>'
+    '<p>This layer is designed to be <b>owned by governance teams</b>, enabling earlier and more nuanced intervention without relying solely on moderation or ranking changes.</p>'
+    '<p style="color:#A8A8B6;font-size:13px;margin-top:12px;border-top:1px solid #2A2A3A;padding-top:12px;">A directional prototype to explore governance intervention design, not a production-ready system.</p>',
     '<p>这个分析从一个内容审核问题出发，但最终指向一个更早期的风险来源：<b>平台激励结构</b>。</p>'
     '<p>传统 moderation 处理的是违规结果，而这个项目关注的是：在违规发生之前，<b>推荐系统如何通过 reward signal 训练创作者行为</b>。</p>'
     '<p>本方案不涉及重写推荐系统，而是提出一个<b>叠加在现有排序之上的轻量治理层</b>，用于识别和干预激励失真带来的风险行为。</p>'
+    '<p>这一层定位为由 <b>governance team 负责</b>，使更早、更精细的干预成为可能，而不必只依赖审核或排序模型的改动。</p>'
+    '<p style="color:#A8A8B6;font-size:13px;margin-top:12px;border-top:1px solid #2A2A3A;padding-top:12px;">这是一个用于探索治理干预设计的方向性原型，不是上线就绪的系统。</p>'
   )}
 </div>
 """, unsafe_allow_html=True)
@@ -662,11 +687,11 @@ st.markdown(f"""
         f'SOP型 engagement 是太太型的 <b style="color:{HI}">{(1/quality_gap):.1f}×</b> ——「互动率即质量」的假设不成立')}</div>
   </div>
   <div class="biz-stat">
-    <div class="label">{t("Hacking Signal", "Hacking 信号")}</div>
+    <div class="label">{t("Distortion Signal", "失真信号")}</div>
     <div class="num">{hacking_share:.1f}%</div>
     <div class="desc">{t(
-        f'<b style="color:{HI}">{total_hacks}</b> of <b style="color:{HI}">{total_videos}</b> videos exploiting algorithm',
-        f'{total_videos} 个视频中有 <b style="color:{HI}">{total_hacks}</b> 个在 exploit 算法')}</div>
+        f'<b style="color:{HI}">{total_hacks}</b> of <b style="color:{HI}">{total_videos}</b> videos showing reward-distortion pattern',
+        f'{total_videos} 个视频中有 <b style="color:{HI}">{total_hacks}</b> 个出现 reward 失真模式')}</div>
   </div>
   <div class="biz-stat">
     <div class="label">{t("Gambler Cycle", "赌徒周期")}</div>
@@ -821,8 +846,8 @@ with cR:
 
 insight("irl")
 
-# ════════════════════════════ MODULE 3 — Reward Hacking Detection ────────────────────────────
-st.markdown(f"<h2>{t('Reward Hacking Detection', 'Reward Hacking 检测')}</h2>", unsafe_allow_html=True)
+# ════════════════════════════ MODULE 3 — Reward Distortion Signals ────────────────────────────
+st.markdown(f"<h2>{t('Reward Distortion Signals', 'Reward 失真信号')}</h2>", unsafe_allow_html=True)
 
 hack_by_creator = hacks.groupby("username")["is_hacking"].sum().sort_values(ascending=False)
 top_hack_user = hack_by_creator.index[0] if hack_by_creator.iloc[0] > 0 else order[0]
@@ -848,7 +873,7 @@ if M[top_hack_user]["n_hacking"] > 0:
     rec = rec_map[top_hack_user]
 else:
     avg_play_mult = avg_eng_def = 0.0
-    pattern = t("No active hacking signals in this cohort window", "当前窗口内无活跃 hacking 信号")
+    pattern = t("No active distortion signals in this cohort window", "当前窗口内无活跃失真信号")
     rec = t("Maintain monitoring", "维持监控")
 
 chart_col, alert_col = st.columns([3.0, 2.0], gap="large")
@@ -875,14 +900,14 @@ with chart_col:
     if len(bad):
         fig3.add_trace(go.Scatter(
             x=bad["play_count"], y=bad["engagement_rate"],
-            mode="markers", name="hacking signal",
+            mode="markers", name="distortion signal",
             marker=dict(size=14, color=PINK, symbol="x-thin", line=dict(width=2.4, color=PINK)),
             customdata=np.stack([bad["username"], bad["created_time"].dt.strftime("%Y-%m-%d"), bad["content_risk"]], axis=-1),
             hovertemplate="@%{customdata[0]}<br>%{customdata[1]}<br>plays %{x:,}<br>eng %{y:.3f}<br>risk %{customdata[2]:.2f}<extra></extra>",
         ))
         fig3.add_annotation(
             x=bad["play_count"].max(), y=bad["engagement_rate"].max(),
-            text=t(f"reward hacking detected · {len(bad)} videos", f"检测到 reward hacking · {len(bad)} 个视频"),
+            text=t(f"reward distortion detected · {len(bad)} videos", f"检测到 reward 失真 · {len(bad)} 个视频"),
             showarrow=False, xanchor="right", yanchor="bottom",
             font=dict(family=MONO, size=13, color=PINK),
             xshift=-4, yshift=10,
@@ -896,13 +921,13 @@ with alert_col:
     st.markdown(f"""
     <div class="alert-panel">
       <span class="alert-tag">⚠ {t("Risk Alert", "风险预警")}</span>
-      <div class="alert-line">{t("Hacking signals detected:", "检测到 Hacking 信号：")}</div>
+      <div class="alert-line">{t("Distortion signals detected:", "检测到失真信号：")}</div>
       <div class="alert-line"><span class="alert-num">{total_hacks}</span> / {total_videos} {t("videos", "视频")} · <span class="alert-num">{hacking_share:.1f}%</span></div>
       <div class="alert-divider"></div>
       <div class="alert-creator">@{top_hack_user}</div>
       <div class="alert-line">{t(
-          f'<span class="alert-num">{M[top_hack_user]["hacking_pct"]:.1f}%</span> of their videos trigger hacking signal',
-          f'其 <span class="alert-num">{M[top_hack_user]["hacking_pct"]:.1f}%</span> 的视频触发 hacking 信号')}</div>
+          f'<span class="alert-num">{M[top_hack_user]["hacking_pct"]:.1f}%</span> of their videos trigger a distortion signal',
+          f'其 <span class="alert-num">{M[top_hack_user]["hacking_pct"]:.1f}%</span> 的视频触发失真信号')}</div>
       <div class="alert-line">{t("avg play count:", "平均播放量：")} <span class="alert-num">{avg_play_mult:.1f}×</span> {t("above their normal", "高于其正常水平")}</div>
       <div class="alert-line">{t("avg engagement:", "平均互动率：")} <span class="alert-num">{avg_eng_def:.1f}×</span> {t("below their normal", "低于其正常水平")}</div>
       <div class="alert-pattern"><b style="color:{TEXT}">{t("Pattern", "模式")}:</b> {pattern}</div>
@@ -1246,8 +1271,8 @@ rows_gov = [
      t("Zero-risk farming", "零风险刷量"),
      t("Content homogenization — flatlined reward at zero variance, no quality differentiation, no creative risk.",
        "内容同质化 — reward 平直在零附近，无质量区分、无创作风险。"),
-     t("Adjust recommender weights to penalize low-variance content profiles; reward exploration and format experimentation.",
-       "调整推荐权重，惩罚低方差内容画像；奖励内容探索和形式实验。")),
+     t("Use the governance signal to deprioritize low-variance content profiles in the candidate set; surface exploration and format experimentation in the recommendation pool — without modifying core ranking.",
+       "通过治理信号在候选集中降权低方差内容画像；在推荐池中提升内容探索和形式实验的曝光——不修改核心排序。")),
     ("mommygardevoir69", ROSE, "Boundary Prober", "边界党 · Boundary Prober",
      t("High-risk gambling", "高风险赌博"),
      t("Edge → punish → restart cycle — single spikes followed by hard suppression train creators to gamble rather than build.",
@@ -1311,6 +1336,19 @@ st.markdown(f"""
     'The aim of this framework is not to replace enforcement, but to <b>reduce the negative training effect</b> that cliff-style penalties have on creator behavior.',
     '该机制的目标不是替代处罚，而是<b>减少断崖式处罚对行为的负向训练效应</b>。'
 )}</div>
+""", unsafe_allow_html=True)
+
+# Success metrics — PM ownership
+st.markdown(f"""
+<div class="metrics-box">
+  <span class="mb-tag">{t("As PM, I own these metrics", "作为 PM，我对这些指标负责")}</span>
+  <div class="mb-section">{t("Primary", "Primary")}</div>
+  <div class="mb-row">{t("Reduction in risky probing frequency", "高风险试探频率下降")}<span class="mb-arch">{t("· Boundary Prober", "· 边界党")}</span></div>
+  <div class="mb-row">{t("Retention rate of high-quality creators", "高质量创作者留存率")}<span class="mb-arch">{t("· Ecosystem Anchor", "· 太太型")}</span></div>
+  <div class="mb-section">{t("Secondary", "Secondary")}</div>
+  <div class="mb-row secondary">{t("No significant drop in overall vertical engagement", "垂类整体互动率无显著下降")}</div>
+  <div class="mb-row secondary">{t("False-positive intervention rate &lt; 3%", "误干预率 &lt; 3%")}</div>
+</div>
 """, unsafe_allow_html=True)
 
 insight("governance")
