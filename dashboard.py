@@ -231,9 +231,90 @@ table.impact td.t-delta.flat {{ color: {DIM}; }}
 .limit-box li {{ margin: 8px 0; font-size: 14px; line-height: 1.8; }}
 .limit-box b {{ color: {HI}; font-weight: 500; }}
 
+/* Opening framing block — sets the scope right at the top */
+.intro-block {{
+    background: {SURFACE}; border-left: 3px solid {CYAN};
+    border-top: 1px solid {BORDER}; border-right: 1px solid {BORDER}; border-bottom: 1px solid {BORDER};
+    border-radius: 0 6px 6px 0;
+    padding: 22px 28px; margin: 22px 0 26px 0;
+    font-family: {MONO}; font-size: 14.5px; color: {NOTE};
+    line-height: 1.85; letter-spacing: 0.005em;
+}}
+.intro-block .intro-tag {{
+    display: inline-block; color: {CYAN}; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.18em;
+    margin-bottom: 12px; font-weight: 500;
+}}
+.intro-block p {{ margin: 0 0 10px 0; }}
+.intro-block p:last-child {{ margin-bottom: 0; }}
+.intro-block b {{ color: {HI}; font-weight: 500; }}
+
+/* Progressive Intervention Framework — 3-level escalation ladder */
+.pif-grid {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 14px 0 16px 0; }}
+.pif-card {{
+    background: {SURFACE}; border: 1px solid {BORDER}; border-radius: 6px;
+    padding: 20px 22px; position: relative;
+    font-family: {MONO}; line-height: 1.7;
+}}
+.pif-card.l1 {{ border-top: 2px solid {CYAN}; }}
+.pif-card.l2 {{ border-top: 2px solid {AMBER}; }}
+.pif-card.l3 {{ border-top: 2px solid {ALERT}; }}
+.pif-card .pif-level {{
+    font-size: 10.5px; color: {MUTED}; text-transform: uppercase; letter-spacing: 0.16em;
+    font-weight: 500; margin-bottom: 4px;
+}}
+.pif-card .pif-name {{ font-size: 15.5px; font-weight: 500; color: {TEXT}; margin-bottom: 10px; }}
+.pif-card.l1 .pif-name {{ color: {CYAN}; }}
+.pif-card.l2 .pif-name {{ color: {AMBER}; }}
+.pif-card.l3 .pif-name {{ color: {ALERT}; }}
+.pif-card .pif-desc {{ font-size: 13px; color: {NOTE}; line-height: 1.7; }}
+.pif-foot {{
+    font-family: {MONO}; font-size: 13px; color: {DIM};
+    margin: 8px 0 4px 0; line-height: 1.7; letter-spacing: 0.005em;
+}}
+.pif-foot b {{ color: {HI}; font-weight: 500; }}
+
+/* Creator cards — three across, click to TikTok */
+.creator-cards {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 18px 0 12px 0; }}
+.creator-card {{
+    background: {SURFACE}; border: 1px solid {BORDER};
+    border-radius: 6px; padding: 18px 20px;
+    text-decoration: none; color: {TEXT};
+    display: block; transition: border-color 0.14s, transform 0.12s;
+    font-family: {MONO};
+}}
+.creator-card:hover {{ border-color: {DIM}; transform: translateY(-1px); text-decoration: none; }}
+.creator-card.cc-cyan   {{ border-left: 3px solid #25F4EE; }}
+.creator-card.cc-yellow {{ border-left: 3px solid #FFC800; }}
+.creator-card.cc-red    {{ border-left: 3px solid #FE2C55; }}
+.creator-card .cc-handle {{ font-size: 15.5px; font-weight: 500; color: {TEXT}; margin-bottom: 4px; }}
+.creator-card .cc-tag {{ font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 12px; display: block; font-weight: 500; }}
+.creator-card.cc-cyan   .cc-tag {{ color: #25F4EE; }}
+.creator-card.cc-yellow .cc-tag {{ color: #FFC800; }}
+.creator-card.cc-red    .cc-tag {{ color: #FE2C55; }}
+.creator-card .cc-stats {{ font-size: 12px; color: {NOTE}; margin-bottom: 10px; line-height: 1.7; }}
+.creator-card .cc-stats b {{ color: {HI}; font-weight: 500; }}
+.creator-card .cc-desc {{ font-size: 12.5px; color: {DIM}; line-height: 1.65; }}
+.gov-layer-note {{
+    font-family: {MONO}; font-size: 13px; color: {DIM};
+    margin: 4px 0 6px 0; letter-spacing: 0.005em; line-height: 1.7;
+    padding-left: 12px; border-left: 2px solid {CYAN};
+}}
+
+/* Closing punchline */
+.punchline {{
+    font-family: {MONO}; color: {TEXT};
+    font-size: 18px; font-weight: 500;
+    margin: 36px 0 8px 0; padding: 24px 28px;
+    background: {SURFACE}; border-left: 4px solid {CYAN};
+    border-radius: 0 6px 6px 0; line-height: 1.7; letter-spacing: 0.005em;
+}}
+.punchline .from {{ color: {DIM}; font-weight: 400; }}
+.punchline .arrow {{ color: {CYAN}; font-weight: 500; }}
+
 /* Bottom credit */
 .bottom-credit {{ font-family: {MONO}; font-size: 12px; color: {DIM};
-    text-align: left; margin-top: 40px; padding-top: 20px;
+    text-align: left; margin-top: 24px; padding-top: 20px;
     border-top: 1px solid {BORDER}; letter-spacing: 0.04em; }}
 </style>
 """, unsafe_allow_html=True)
@@ -415,22 +496,22 @@ INSIGHTS = {
     },
     "irl": {
         "PM": {
-            "EN": "The radar shows the platform thinks it's running one set of rules for everyone, but each creator is responding to a completely different incentive. This is not a creator problem — it's a reward function design problem.",
-            "CN": "雷达图展示平台以为自己在用同一套规则管理所有创作者，但每个人在响应完全不同的激励。这不是创作者的问题，是 reward function 设计的问题。",
+            "EN": "Behavioral signals suggest each creator type responds to fundamentally different implicit incentives. This is a pattern observation from 184 videos — intended to inform <b>governance routing decisions</b>, not algorithmic changes.",
+            "CN": "行为信号显示每种创作者类型在响应根本不同的隐性激励。这是基于 184 个视频的模式观察——用于支持<b>治理路由决策</b>，不针对算法修改。",
         },
         "Data": {
-            "EN": "OLS fit on standardized features. Caveat: n is small per creator; weight direction matters more than absolute magnitude. R² is shown for transparency, not for causal inference.",
-            "CN": "OLS 拟合，标准化特征。注意：n=60，统计显著性有限，权重方向比绝对值更重要。R² 仅供参考，不做因果推断。",
+            "EN": "Standardized observational analysis on weekly behavioral aggregates. Caveat: n is small per creator; weight direction is the signal, magnitudes are not. R² shown for transparency, not as a causal claim.",
+            "CN": "在周度行为聚合上做标准化观察性分析。注意：每个创作者 n 较小，权重方向是信号，数量级不是。R² 仅供透明披露，不做因果推断。",
         },
         "Algorithm": {
-            "EN": "Simplified linear IRL. For production, use MaxEnt IRL or GAIL to handle nonlinear rewards. Current weights are usable as a feature-engineering prior for creator risk-tier models.",
-            "CN": "线性 IRL 简化版。生产环境建议 MaxEnt IRL 或 GAIL 处理非线性奖励。当前权重可作为创作者风险分级模型的特征工程先验。",
+            "EN": "Treat the recovered weights as a behavioral incentive proxy, not a precise reward model. Useful as a feature-engineering prior for a creator risk-tier classifier; nonlinear approaches would be needed before production deployment.",
+            "CN": "将得到的权重视为行为激励 proxy，而不是精确的 reward model。可作为创作者风险分级分类器的特征工程先验；上线前需要非线性方法支撑。",
         },
     },
     "hacking": {
         "PM": {
-            "EN": "Red marks = high plays + low engagement + risky content. These are not policy violations — they are signs the incentive system has failed. Traditional moderation tools cannot catch this because nothing is technically wrong with the content. This is exactly where governance PM matters.",
-            "CN": "红色标注 = 高播放 + 低互动 + 高风险内容。这不是违规，但是平台激励失效的信号。传统审核工具发现不了这个，因为这些内容没有违规——这正是治理 PM 存在的价值。",
+            "EN": "What this surfaces is not a violation, but a reward distortion signal. A typical pattern is the high-plays / low-engagement combination — content that is exploiting the recommender mechanism instead of earning genuine user response. Moderation usually doesn't catch these because the content doesn't break a rule. So this signal is better positioned as an early-warning input into the governance layer, not as an enforcement basis.",
+            "CN": "这里关注的并不是违规内容，而是激励失真信号（reward distortion signals）。一类典型模式是：高播放 + 低互动的异常组合，表明内容在 exploit 推荐机制，而非获得真实用户反馈。这些内容通常不会被 moderation 捕捉，因为它们不违规。因此，这类信号更适合作为治理层的早期预警输入，而非审核依据。",
         },
         "Data": {
             "EN": "Trigger condition: play > 75th pct AND engagement < 25th pct AND risk > 0.5. Rule-based; for production, use Isolation Forest or autoencoder-based unsupervised anomaly detection to remove the manual threshold dependency.",
@@ -443,8 +524,8 @@ INSIGHTS = {
     },
     "ews": {
         "PM": {
-            "EN": "Three cards, three creator-archetype early warnings — fired before content moderation would catch anything, because content has not violated yet but behavioral patterns predict risk. This is what governance PM should actually do: shift from reactive enforcement to proactive identification of systemic bias.",
-            "CN": "三个 card 对应三种创作者类型的早期预警信号。这套预警在传统内容审核之前触发——内容还没违规，但行为模式已经预示风险。这是治理 PM 真正应该做的事：从被动响应违规，到主动识别系统性偏差。",
+            "EN": "These early-warning signals act as governance-layer inputs that route into different intervention types: <b>variance collapse → content-homogenization risk → adjust algorithmic exploration weight</b>; <b>spike-cliff → gambling behavior → progressive intervention</b>; <b>quality–volatility divergence → top-creator churn risk → quality-protection mechanism</b>. The point isn't the detection itself — it's how these signals route to different governance actions.",
+            "CN": "这些预警信号可以作为治理层的输入，用于触发不同类型的干预机制：<b>方差坍缩 → 内容同质化风险 → 算法侧调节探索权重</b>；<b>尖峰-断崖 → 赌博行为 → 渐进式干预</b>；<b>质量-波动背离 → 高质量流失风险 → 质量保护机制</b>。关键不是检测本身，而是这些信号如何路由到不同治理动作。",
         },
         "Data": {
             "EN": "Each signal is one computable trigger condition: variance collapse → rolling-σ; spike-cliff → peak/mean ratio with descent confirmation; quality–volatility divergence → joint condition on engagement-z-score and reward σ. All three can be wired straight into a streaming pipeline.",
@@ -457,8 +538,8 @@ INSIGHTS = {
     },
     "simulation": {
         "PM": {
-            "EN": "Each slider is a policy intention translated into a model parameter — the shared language between PM and the algorithm team. What you change is not a number, it is the platform's stance toward creator behavior.",
-            "CN": "每个 slider 是一个 policy 意图翻译成的模型参数。这是 PM 和算法团队对话的共同语言——你改变的不是数字，是平台对创作者行为的态度。",
+            "EN": "The goal of this module is not to predict behavior precisely, but to provide a governance experiment sandbox: translate a policy intention (e.g., \"reward genuine engagement quality more\") into a parameter adjustment, then observe how each creator archetype's behavior is likely to shift under that incentive structure. This lets the governance team directionally validate a policy before it ships, without depending on a fully offline analysis.",
+            "CN": "这个模块的目标不是精确预测行为，而是提供一个治理策略的实验沙盒（governance experiment sandbox）：将 policy 意图（例如「更重视互动质量」）转化为参数调整，观察不同创作者原型在该激励结构下的行为变化趋势。这使 governance 团队可以在上线前对策略进行方向性验证，而不依赖完全离线分析。",
         },
         "Data": {
             "EN": "Prediction model: linear response + adaptation lag. delta = Σ(sensitivity_i × Δweight_i). Lag is estimated from behavioral inertia. For production, use a Kalman filter to update trajectories in real time.",
@@ -479,8 +560,8 @@ INSIGHTS = {
             "CN": "Intervention mapping：w_risk high → content classifier fine-tuning；w_play >> w_engagement → ranking weight recalibration；reward cliff → graduated enforcement curve。",
         },
         "Algorithm": {
-            "EN": "Experiment design: stratified A/B test, minimum window = max(adaptation_lag) = 6 weeks. Control keeps current weights; treatment moves per simulation; analyze results stratified by archetype.",
-            "CN": "实验设计：分层 A/B test，最短实验周期 = max(adaptation_lag) = 6 weeks。控制组保持当前权重，实验组按 simulation 结果调整，按 archetype 分层分析结果。",
+            "EN": "Experiment design: stratified A/B test, minimum window = max(adaptation_lag) = 6 weeks. Control keeps current weights; treatment moves per simulation; analyze results stratified by archetype. Recommend piloting in a single vertical (e.g., Cosplay) and using creator archetype as the stratification dimension rather than reading the whole-cohort mean.",
+            "CN": "实验设计：分层 A/B test，最短实验周期 = max(adaptation_lag) = 6 weeks。控制组保持当前权重，实验组按 simulation 结果调整，按 archetype 分层分析结果。建议在单一垂类（如 Cosplay）中进行 pilot，并以创作者原型为分层维度进行分析，而非整体均值。",
         },
     },
 }
@@ -511,6 +592,21 @@ with lang_col:
             st.session_state.lang = "CN"; st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
 
+# ────────────── Opening framing — scope-setting paragraph (right under title) ──────────────
+st.markdown(f"""
+<div class="intro-block">
+  <span class="intro-tag">{t("Scope &amp; framing", "范围与定位")}</span>
+  {t(
+    "<p>This analysis starts from a content-moderation question but ultimately points to an earlier source of risk: <b>the platform's incentive structure</b>.</p>"
+    '<p>Traditional moderation handles the consequences of violations. This project focuses on the upstream layer — <b>how the recommender system trains creator behavior through reward signals</b>, before any violation occurs.</p>'
+    '<p>The proposal does not rewrite the recommender. It adds a <b>lightweight governance layer on top of existing ranking</b>, used to identify and intervene in risk behaviors that emerge from incentive distortion.</p>',
+    '<p>这个分析从一个内容审核问题出发，但最终指向一个更早期的风险来源：<b>平台激励结构</b>。</p>'
+    '<p>传统 moderation 处理的是违规结果，而这个项目关注的是：在违规发生之前，<b>推荐系统如何通过 reward signal 训练创作者行为</b>。</p>'
+    '<p>本方案不涉及重写推荐系统，而是提出一个<b>叠加在现有排序之上的轻量治理层</b>，用于识别和干预激励失真带来的风险行为。</p>'
+  )}
+</div>
+""", unsafe_allow_html=True)
+
 st.markdown('<div class="audience-row">', unsafe_allow_html=True)
 a1, a2, a3, _ = st.columns([1.4, 2.0, 2.4, 5.0], gap="small")
 audience_options = [
@@ -525,6 +621,35 @@ for col, (label, value) in zip([a1, a2, a3], audience_options):
             st.session_state.audience = value
             st.rerun()
 st.markdown('</div>', unsafe_allow_html=True)
+
+# ────────────── Three creator cards (clickable to TikTok) ──────────────
+v_eng_pct = M["vanzzcoser"]["avg_engagement"] * 100
+c_eng_pct = M["cosplaybeauty888"]["avg_engagement"] * 100
+m_eng_pct = M["mommygardevoir69"]["avg_engagement"] * 100
+c_var = M["cosplaybeauty888"]["reward_std"]
+
+st.markdown(f"""
+<div class="creator-cards">
+  <a class="creator-card cc-cyan" href="https://www.tiktok.com/@vanzzcoser" target="_blank" rel="noopener">
+    <div class="cc-handle">@vanzzcoser</div>
+    <div class="cc-tag">{t("Ecosystem Anchor · 太太型", "Ecosystem Anchor · 太太型")}</div>
+    <div class="cc-stats"><b>524K</b> followers · {t("avg engagement", "平均互动率")} <b>{v_eng_pct:.1f}%</b> · {t("reward volatility", "reward 波动")} <b>{stability_gap:.1f}×</b></div>
+    <div class="cc-desc">{t("High quality · unstable reward · platform not protecting this creator", "高质量 · reward 不稳定 · 平台未在保护这位创作者")}</div>
+  </a>
+  <a class="creator-card cc-yellow" href="https://www.tiktok.com/@cosplaybeauty888" target="_blank" rel="noopener">
+    <div class="cc-handle">@cosplaybeauty888</div>
+    <div class="cc-tag">{t("Algorithm Exploiter · SOP型", "Algorithm Exploiter · SOP型")}</div>
+    <div class="cc-stats">{t("avg engagement", "平均互动率")} <b>{c_eng_pct:.1f}%</b> · {t("reward variance", "reward 方差")} <b>≈{c_var:.2f}</b></div>
+    <div class="cc-desc">{t("Machine-like posting · systematically exploiting algorithm", "机器化发布 · 系统性 exploit 算法")}</div>
+  </a>
+  <a class="creator-card cc-red" href="https://www.tiktok.com/@mommygardevoir69" target="_blank" rel="noopener">
+    <div class="cc-handle">@mommygardevoir69</div>
+    <div class="cc-tag">{t("Boundary Prober · 边界党", "Boundary Prober · 边界党")}</div>
+    <div class="cc-stats"><b>64K</b> followers · {t("avg engagement", "平均互动率")} <b>{m_eng_pct:.1f}%</b> · peak/mean <b>{gambler_ratio:.1f}×</b></div>
+    <div class="cc-desc">{t("Single viral spike → suppression → reset → repeat", "单次爆款 → 压制 → 重置 → 循环")}</div>
+  </a>
+</div>
+""", unsafe_allow_html=True)
 
 # ────────────── Business Impact Summary Bar ──────────────
 st.markdown(f"""
@@ -561,6 +686,9 @@ st.markdown(f"""
 <div class="biz-bar-note">{t(
     'these four numbers point to an <b>incentive alignment gap</b> — the current reward structure is not protecting what the ecosystem needs most.',
     '这四个数字指向<b>激励对齐缺口</b>——当前 reward 结构没有保护到生态最需要保护的部分。')}</div>
+<div class="gov-layer-note">{t(
+    'These signals inform a <b>governance intervention layer on top of existing ranking</b> — not modifications to core recommendation objectives.',
+    '这些信号支持<b>在现有排序之上的治理干预层</b> — 不修改核心推荐目标。')}</div>
 """, unsafe_allow_html=True)
 
 order = ["mommygardevoir69", "cosplaybeauty888", "vanzzcoser"]
@@ -641,7 +769,7 @@ st.markdown(
 )
 
 # ════════════════════════════ MODULE 2 — Inferred Reward Functions ════════════════════════════
-st.markdown(f"<h2>{t('Inferred Reward Functions', '推导的奖励函数')}</h2>", unsafe_allow_html=True)
+st.markdown(f"<h2>{t('Behavioral Incentive Signals', '行为激励信号')}</h2>", unsafe_allow_html=True)
 
 feats = ["play_growth","engagement_rate","posting_frequency","content_risk"]
 labels_short = (
@@ -831,7 +959,10 @@ st.markdown(f"""
     <div class="ews-divider"></div>
     <div class="ews-action">
       <b>{risk_label}:</b> {t("systematic algorithm exploit, content homogenization accelerating.", "系统性 exploit 算法，内容同质化加速。")}<br><br>
-      <b>{rec_label}:</b> {t("algorithm weight recalibration. No human moderation required.", "算法权重重校准，不需要人工审核。")}
+      <b>{t("Product action", "产品动作")}:</b> {t(
+        "flag for internal ops review via governance dashboard — 2-week monitoring window, no creator-facing action at this stage.",
+        "通过 governance dashboard 标记进入内部 ops 复核 — 2 周观察窗口，本阶段不对创作者采取动作。"
+      )}
     </div>
   </div>
 
@@ -844,7 +975,10 @@ st.markdown(f"""
     <div class="ews-divider"></div>
     <div class="ews-action">
       <b>{risk_label}:</b> {t("creator entered gambling cycle. Probability of next risky probe is high.", "创作者进入赌徒循环，下一次风险试探概率高。")}<br><br>
-      <b>{rec_label}:</b> {t("pre-stream risk nudge + graduated intervention. Don't wait for the violation.", "开播前风险提示 + 渐进干预，不要等违规发生。")}
+      <b>{t("Product action", "产品动作")}:</b> {t(
+        "pre-stream risk nudge (in-product notification) → if pattern repeats within 2 weeks: graduated reach throttle → hard enforcement only on 3rd confirmed instance.",
+        "开播前风险提示（产品内通知）→ 若 2 周内模式重复：渐进式曝光限制 → 仅在第 3 次确认时触发强治理。"
+      )}
     </div>
   </div>
 
@@ -857,7 +991,10 @@ st.markdown(f"""
     <div class="ews-divider"></div>
     <div class="ews-action">
       <b>{risk_label}:</b> {t("high-quality creator getting unstable returns. Churn risk elevated.", "高质量创作者得不到稳定回报，流失风险升高。")}<br><br>
-      <b>{rec_label}:</b> {t("build a quality-protection floor — engagement-weighted distribution for tenured creators.", "建立质量保护底——为资深创作者使用 engagement-weighted 分发。")}
+      <b>{t("Product action", "产品动作")}:</b> {t(
+        "enroll in quality protection tier — engagement-weighted distribution floor for 4 weeks, measure creator retention delta vs. control group.",
+        "纳入质量保护层 — 4 周 engagement-weighted 分发底线，测量与控制组的创作者留存差异。"
+      )}
     </div>
   </div>
 
@@ -871,7 +1008,7 @@ OLD_PLATFORM = dict(play_growth=0.5, engagement_rate=0.3, posting_frequency=0.2,
 
 st.markdown(f"<h2>{t('Policy Simulation', '策略仿真')}</h2>", unsafe_allow_html=True)
 st.markdown(f'<div class="sim-title">{t("What happens to each creator archetype in the 12 weeks after a policy change?", "策略调整后的 12 周内，每种创作者原型会怎么演变？")}</div>', unsafe_allow_html=True)
-st.markdown(f'<div class="sim-subtitle">{t("translating governance intentions into behavioral predictions · bridging policy and algorithm teams", "把治理意图翻译成行为预测 · 连接 policy 和算法团队")}</div>', unsafe_allow_html=True)
+st.markdown(f'<div class="sim-subtitle">{t("simulating governance intervention routing · not ranking weight changes · each slider = a policy intention, not an algorithm parameter", "模拟治理干预路由 · 不是排序权重调整 · 每个 slider 是 policy 意图，不是算法参数")}</div>', unsafe_allow_html=True)
 
 ctrl_col, plot_col, impact_col = st.columns([1.0, 2.4, 2.2], gap="medium")
 
@@ -1051,10 +1188,10 @@ insight("simulation")
 
 st.markdown(f"""
 <div class="live-block">
-  <span class="live-tag">{t("Extending to LIVE", "延伸到 LIVE 场景")}</span>
+  <span class="live-tag">{t("Designed for LIVE governance first", "面向 LIVE 治理优先设计")}</span>
   {t(
-    "In short-video, adaptation lag is measured in weeks. In a LIVE session, the same behavioral cycle compresses into a single 90-minute stream — open with safe content to build trust, probe boundaries mid-session, hit the highest-risk point at the gift peak, then snap back to safe content the moment a platform warning fires. The IRL frame applies directly to real-time risk forecasting in LIVE; what is needed is real-time behavioral signal, not weekly aggregates.",
-    "短视频的 adaptation lag 是以周计算的。LIVE 里，同样的行为模式压缩在一场直播的 90 分钟内——开播建立安全感，中段试探边界，礼物高峰期达到最高风险点，平台警告触发后立刻切回安全内容。这套 IRL 框架直接适用于 LIVE 实时风险预判，需要的是实时行为信号，而不是周级别的聚合数据。"
+    "Short-video data is used here as an <b>observable proxy</b> for behavior patterns that, in LIVE, manifest at a compressed time scale — a 6-week behavioral shift becomes a 90-minute in-stream arc. This framework is designed for LIVE governance first; short-video is the measurable stand-in until internal LIVE event-stream data is accessible. In LIVE: <b>gifting velocity</b> replaces play_growth, <b>real-time chat density</b> replaces engagement_rate, <b>PK / co-host behavior</b> replaces posting_frequency.",
+    "本 demo 使用短视频数据，是因为它是 LIVE 中以压缩时间尺度发生的行为模式的<b>可观测 proxy</b>——6 周的行为变化在一场直播中表现为 90 分钟的 in-stream arc。这个框架优先服务 LIVE 治理；在内部 LIVE 事件流数据可用之前，短视频是可量化的替代物。在 LIVE 中：<b>礼物速度</b>替代 play_growth，<b>实时弹幕密度</b>替代 engagement_rate，<b>PK / 连麦行为</b>替代 posting_frequency。"
   )}
 </div>
 """, unsafe_allow_html=True)
@@ -1137,6 +1274,45 @@ for u, c, _, name_label, strat, trained, intervention in rows_gov:
     """
 table_html += "</tbody></table>"
 st.markdown(table_html, unsafe_allow_html=True)
+
+# Progressive Intervention Framework — the prescribed mechanism, not just diagnosis
+st.markdown(f"""
+<div class="pif-foot" style="margin-top:24px;">{t(
+    'Based on the signals above, the diagnosis routes into a <b>progressive intervention framework</b>:',
+    '基于上述信号，可以设计一个<b>渐进式治理机制</b>（progressive intervention framework）：'
+)}</div>
+<div class="pif-grid">
+  <div class="pif-card l1">
+    <div class="pif-level">{t("Level 1", "第 1 级")}</div>
+    <div class="pif-name">{t("Creator Nudge", "Creator Nudge")}</div>
+    <div class="pif-desc">{t(
+        "Surface a hint pre-stream or when behavior diverges from baseline (e.g., engagement anomaly, rising risk score).",
+        "在开播前或行为异常时提供提示（例如互动异常、风险上升）。"
+    )}</div>
+  </div>
+  <div class="pif-card l2">
+    <div class="pif-level">{t("Level 2", "第 2 级")}</div>
+    <div class="pif-name">{t("Graduated Throttling", "Graduated Throttling")}</div>
+    <div class="pif-desc">{t(
+        "Mild, gradual reach restriction designed to guide behavior back toward the baseline — not punishment, course correction.",
+        "对曝光进行轻微、渐进的限制，引导行为回归。"
+    )}</div>
+  </div>
+  <div class="pif-card l3">
+    <div class="pif-level">{t("Level 3", "第 3 级")}</div>
+    <div class="pif-name">{t("Hard Enforcement", "Hard Enforcement")}</div>
+    <div class="pif-desc">{t(
+        "Strong governance action triggered only on repeat violations — the existing moderation pathway, used as the last step.",
+        "在重复违规情况下触发强治理措施。"
+    )}</div>
+  </div>
+</div>
+<div class="pif-foot">{t(
+    'The aim of this framework is not to replace enforcement, but to <b>reduce the negative training effect</b> that cliff-style penalties have on creator behavior.',
+    '该机制的目标不是替代处罚，而是<b>减少断崖式处罚对行为的负向训练效应</b>。'
+)}</div>
+""", unsafe_allow_html=True)
+
 insight("governance")
 
 # ────────────── Limitations ──────────────
@@ -1145,7 +1321,7 @@ limit_label = t("known limitations · what would change for production",
 
 limit_items_en = [
     "<b>Sample size · n ≈ 60 per creator, ~5–10 weekly buckets after aggregation.</b> OLS over 4 features on ~7 points is illustrative, not statistically robust. R² shown for transparency, not as evidence; weight <i>direction</i> is the signal, magnitudes are not.",
-    "<b>\"IRL\" is a regression analogy, not formal IRL.</b> Real IRL (MaxEnt, GAIL) recovers a reward function under which expert trajectories are optimal. This dashboard fits a linear regression of reward_signal on behavioral features — directionally useful, but the label is aspirational.",
+    "<b>The recovered weights are a behavioral incentive proxy, not a formal reward model.</b> They describe directional patterns observed in creator behavior under the current incentive structure — useful for routing decisions, not for causal claims about the recommender.",
     "<b>engagement_rate = (likes + comments + shares) / plays</b> — closer to TikTok's real definition than likes/plays, but plays still includes passive scrolls. True engagement requires retention/watch-time, which the public API does not expose.",
     "<b>content_risk_score is a hashtag lexicon, not a multimodal classifier.</b> #hanime, #doujin etc. trigger weight, but the actual videos may be in-genre discussion, not high-risk content. Production needs frame-level + audio + OCR; expect false positives here.",
     "<b>shares as a follower-growth proxy is weak.</b> In the cosplay vertical, much sharing happens via DM, which is not captured. The 0.2 weight on Δshares in reward_signal is a placeholder for follower delta.",
@@ -1158,7 +1334,7 @@ limit_items_en = [
 
 limit_items_cn = [
     "<b>样本量 · 每个创作者 n ≈ 60，按周聚合后只有 5–10 个数据点。</b>用 4 个特征做 OLS 拟合 ~7 个点，统计上是示意，不是稳健的。R² 仅供透明披露，不作为证据；权重<i>方向</i>是信号，数量级不是。",
-    "<b>这里的「IRL」是回归类比，不是真正的 IRL。</b>真正的 IRL（MaxEnt, GAIL）反推出一个让专家轨迹最优的 reward function。本 dashboard 只是把 reward_signal 对行为特征做线性回归——方向上有用，但标签是托词。",
+    "<b>得到的权重是行为激励 proxy，不是正式的 reward model。</b>它描述的是当前激励结构下观察到的创作者行为方向性模式——用于路由决策有用，不能据此对推荐系统做因果断言。",
     "<b>engagement_rate = (likes + comments + shares) / plays</b> ——比 likes/plays 更接近 TikTok 真实定义，但播放量仍包含被动滑过的曝光。真实互动需要留存/观看时长，公开 API 拿不到。",
     "<b>content_risk_score 是 hashtag 词典，不是多模态分类器。</b>#hanime、#doujin 等会被打分，但实际视频可能是在讨论同人文化，不是真高风险内容。生产环境需要帧级 + 音频 + OCR；本 demo 会有误报。",
     "<b>用 shares 作为粉丝增长 proxy 很弱。</b>二次元垂类大量分享是私信转发，无法统计。reward_signal 中 Δshares 的 0.2 权重只是粉丝增长的占位。",
